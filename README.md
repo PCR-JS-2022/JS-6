@@ -63,7 +63,7 @@ nav.buildPath("Yekaterinburg", "Perm", 0.06);
 /*
 {
   distance: 900,
-  price: 2382.9,
+  sum: 2382.9,
 },
 */
 ```
