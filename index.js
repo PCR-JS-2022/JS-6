@@ -5,11 +5,14 @@ class Navigator {
    * @param {*} cities
    */
   constructor(cities) {
-    if (!Array.isArray(cities) || cities.some(city => typeof city.name !== 'string'
-      || typeof city.petrolPrice !== 'number'
-      || typeof city.paths !== 'object'
-      || Object.values(city.paths).some(distance => typeof distance !== 'number')
-    )) {
+    if (!Array.isArray(cities)
+      || cities.some(city => typeof city.name !== 'string'
+        || city.name === ''
+        || typeof city.petrolPrice !== 'number'
+        || typeof city.paths !== 'object'
+        || Object.values(city.paths).some(distance => typeof distance !== 'number')
+      )
+      || cities.map(city => city.name).filter((v, i, a) => a.indexOf(v) === i).length < cities.length) {
       throw new Error();
     }
     this.cities = cities;
@@ -22,7 +25,11 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
-    if (this.cities.every(city => pointA !== city.name)
+    if (typeof pointA !== 'string'
+      || pointA === ''
+      || typeof pointB !== 'string'
+      || pointB === ''
+      || this.cities.every(city => pointA !== city.name)
       || this.cities.every(city => pointB !== city.name)
       || typeof consumtion !== 'number'
     ) {
