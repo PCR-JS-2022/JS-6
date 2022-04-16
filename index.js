@@ -39,6 +39,16 @@ class Navigator {
 
     const findPaths = visited => {
       const cityName = visited.cities[visited.cities.length - 1];
+
+      if (cityName === pointB) {
+        if (!result || result.distance > visited.distance) {
+          result = {
+            distance: visited.distance,
+            sum: visited.sum,
+          }
+        }
+        return;
+      }
       const currentCity = this.cities.find(city => city.name === cityName);
 
       Object.entries(currentCity.paths).forEach(([nextCityName, distance]) => {
@@ -46,23 +56,10 @@ class Navigator {
           return;
         }
 
-        const newDistance = visited.distance + distance;
-        const newSum = visited.sum + currentCity.petrolPrice * distance * consumtion;
-
-        if (nextCityName === pointB) {
-          if (!result || result.distance > newDistance) {
-            result = {
-              distance: newDistance,
-              sum: newSum,
-            }
-          }
-          return;
-        }
-
         findPaths({
           cities: [...visited.cities, nextCityName],
-          distance: newDistance,
-          sum: newSum,
+          distance: visited.distance + distance,
+          sum: visited.sum + currentCity.petrolPrice * distance * consumtion,
         });
       });
     };
