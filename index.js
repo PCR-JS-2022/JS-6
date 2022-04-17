@@ -57,10 +57,13 @@ class Navigator {
     }
     const distance = Dijkstra(table, indexStart)[1][indexEnd];
     const city = Dijkstra(table, indexStart)[0];
-    const km = Dijkstra(table, indexStart)[2];
+    const km = Dijkstra(table, indexStart)[2].filter(i => i !== 0);
 
     let sum = cityA.petrolPrice * km[0] * consumtion; 
     for(let i = 0; i < city.length; i++) {
+      if(city[i] === indexStart) {
+        continue;
+      }
       sum += this.cities[city[i]].petrolPrice * km[i + 1] * consumtion;
     }
     
@@ -72,3 +75,4 @@ class Navigator {
 }
 
 module.exports = { Navigator };
+
