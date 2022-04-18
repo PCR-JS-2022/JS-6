@@ -54,7 +54,9 @@ class Navigator {
         }
 
         findAllPaths(startCity.name, 0, 0);
-
+        if (result.length <= 0) {
+            throw new Error('Пути не существует!');
+        }
         return result.sort((a, b) => a.distance - b.distance)[0];
     }
 
