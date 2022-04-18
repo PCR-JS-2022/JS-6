@@ -6,6 +6,7 @@ class Navigator {
    */
   constructor(cities) {
     if (!Array.isArray(cities)
+      || !cities
       || cities.every(c => typeof c !== 'object')
       || cities.every(c => typeof c.paths !== 'object')) {
       throw new TypeError("Некорректный ввод Navigator");
@@ -27,7 +28,7 @@ class Navigator {
       throw new Error('Нет конечных городов')
     }
     
-    if (Object.keys(cities.find(c => c.name === pointA).paths).length == 0) {
+    if (Object.keys(this.cities.find(c => c.name === pointA).paths).length == 0) {
       throw new Error('Нет путей из города')
     }
   }
@@ -62,7 +63,7 @@ class Navigator {
     this.inputCheck(pointA, pointB, consumtion)
 
     this.ways = []
-    cities.forEach((city) => {
+    this.cities.forEach((city) => {
       city.visiteeed = false
     })
 
@@ -75,7 +76,7 @@ class Navigator {
       currentCity.visiteeed = true
       Object.keys(currentCity.paths).forEach((nextCity) => {
         findAllWays(
-          cities.find(c => c.name === nextCity),
+          this.cities.find(c => c.name === nextCity),
           lenght + currentCity.paths[nextCity],
           cost + currentCity.paths[nextCity] * consumtion * currentCity.petrolPrice
         )
@@ -83,7 +84,7 @@ class Navigator {
     }
 
     findAllWays(
-      cities.find(c => c.name === pointA),
+      this.cities.find(c => c.name === pointA),
       0,
       0
     )
