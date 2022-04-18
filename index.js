@@ -19,46 +19,37 @@ class Navigator {
 			throw new Error("Невалидные входные данные!");
 		}
 
-		let bestOrder = [];
-		let bestLength = Number.MAX_VALUE;
-		let bestCost = Number.MAX_VALUE;
 		const start = this.cities.find(city => city.name === pointA);
 		const finish = this.cities.find(city => city.name === pointB);
+		const visited = new Set();
+		const potentialSolutions = [];
 
-		const isVisitedPoint = (currentOrder, currentIndex, nextCity) => {
-			let index = currentOrder.indexOf(nextCity);
-			return (!(index === -1 || index >= currentIndex))
-		}
-
-		const makePermutations = (currentLength, currentCost, currentIndex, currentCity, currentOrder) => {
-			if (currentLength > bestLength) {
+		const makePermutations = (currentCity, currentLength, currentCost) => {
+			if (visited.has(currentCity)) {
 				return;
 			}
 
-			if (currentOrder[currentIndex - 1] === finish) {
-				bestOrder = Array.from(currentOrder);
-				bestLength = currentLength;
-				bestCost = currentCost;
+			if (currentCity === finish) {
+				potentialSolutions.push({ distance: currentLength, sum: currentCost });
 				return;
 			}
 
+			visited.add(currentCity);
 			for (const nextCityName in currentCity.paths) {
 				const nextCity = this.cities.filter(x => x.name === nextCityName)[0];
-				if (isVisitedPoint(currentOrder, currentIndex, nextCity))
-					continue;
 				let distance = currentCity.paths[nextCityName];
 				let cost = distance * consumption * currentCity.petrolPrice;
-				currentOrder[currentIndex] = nextCity;
-				makePermutations(currentLength + distance, currentCost + cost, currentIndex + 1, nextCity, currentOrder);
+				makePermutations(nextCity, currentLength + distance, currentCost + cost);
 			}
 		}
 
-		makePermutations(0, 0, 1, start, [start]);
+		makePermutations(start, 0, 0);
 
-		if (bestOrder.length === 0)
+		if (potentialSolutions.length === 0) {
 			throw new Error("The path does not exist");
+		}
 
-		return { distance: bestLength, sum: bestCost, d: bestOrder };
+		return potentialSolutions.sort((first, second) => first.distance - second.distance)[0];
 	}
 }
 
