@@ -24,8 +24,9 @@ class Navigator {
             || typeof pointA !== 'string'
             || typeof consumtion !== 'number'
             || !this.cities.length
+            || consumtion <= 0
         ) {
-            return;
+            throw new Error('Invalid arguments');
         }
 
         //кратчайшие пути
