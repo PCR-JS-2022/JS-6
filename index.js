@@ -43,7 +43,8 @@ class Navigator {
     if (!end.road){
       throw new Error('Дороги из пункта А в пункт Б не существет!');
     }
-    return { distance: end.road, sum: end.price };
+    return { distance: end.road,
+      sum: end.price };
   }
 }
 
