@@ -31,8 +31,8 @@ class Navigator {
       ///cityB === cityC.name
       for (const cityB in cityA.paths) {
         const cityC = roads.find(city => city.name === cityB)
-        if (cityA.paths.includes(cityB) && (!cityC.road || cityC.road > (cityA.paths[cityB] + cityA.road))) {
-          cityC.road = table.cityA.paths[cityB] + cityA.road;
+        if (cityB in cityA.paths && (!cityC.road || cityC.road > (cityA.paths[cityB] + cityA.road))) {
+          cityC.road = cityA.paths[cityB] + cityA.road;
           cityC.price = cityA.price + consumption * cityA.petrolPrice * cityA.paths[cityB];
           
           dijkstra(cityC, roads);
