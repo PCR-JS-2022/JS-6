@@ -64,7 +64,9 @@ class Navigator {
 
     findBestPath(pointA);
 
-    return result;
+    if(!result){
+      throw new Error("Путь не существует")
+    }
   }
 }
 
