@@ -67,6 +67,7 @@ class Navigator {
     if(!result){
       throw new Error("Путь не существует")
     }
+    return result;
   }
 }
 
