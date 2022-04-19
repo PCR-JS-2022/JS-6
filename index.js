@@ -23,6 +23,7 @@ class Navigator {
             || typeof pointB !== 'string'
             || typeof pointA !== 'string'
             || typeof consumtion !== 'number'
+            || !this.cities.length
         ) {
             return;
         }
