@@ -24,6 +24,13 @@ class Navigator {
     const finish = this.cities.find(city => city.name === pointB);
     const citiesClone = this.cities.slice(0);
     let allResults = [];
+    for (const neighbor in start.paths) {
+      if (neighbor === finish.name) {
+        const distance = start.paths[neighbor];
+        const sum = distance * start.petrolPrice * consumtion;
+        return {distance, sum};
+      }
+    }
     const findAllResults = (currCity, distance, sum) => {
       if (currCity.name === finish.name) {
         allResults.push({distance, sum});
