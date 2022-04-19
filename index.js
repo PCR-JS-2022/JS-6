@@ -23,7 +23,7 @@ class Navigator {
 
     const tempCities = this.cities.map(city => ({ ...city, visited: false }))
     let result = {
-      distance: Number.MAX_VALUE
+      distance: Number.POSITIVE_INFINITY
     }
 
     const getAllPaths = (currentCity, distance, sum) => {
@@ -48,7 +48,7 @@ class Navigator {
     }
     getAllPaths(tempCities.find(city => city.name === pointA), 0, 0)
 
-    if (result == { distance: Number.MAX_VALUE }) {
+    if (result.distance == Infinity) {
       throw new Error('Пути из A в B нет')
     }
     result = {
