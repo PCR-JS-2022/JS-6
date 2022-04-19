@@ -17,12 +17,12 @@ class Navigator {
   buildPath(pointA, pointB, consumtion) {
     if (!(typeof pointA === "string" &&
       typeof pointB === "string" &&
-      typeof consumtion === "number")){
+      typeof consumtion === "number" &&
+      pointA !== pointB)){
       throw new Error("Переданы некорректные данные.");
     }
     const start = this.cities.find(city => city.name === pointA);
     const finish = this.cities.find(city => city.name === pointB);
-    const citiesClone = this.cities.slice(0);
     let allResults = [];
     for (const neighbor in start.paths) {
       if (neighbor === finish.name) {
@@ -45,13 +45,10 @@ class Navigator {
       }
       
       for (let neighbor in currCity.paths) {
-        if (currCity.name === start.name) {
-          distance = 0;
-        }
         if (neighbor !== start.name){        
           const currDistance = distance + currCity.paths[neighbor];
           const currSum = sum + currCity.paths[neighbor] * consumtion * currCity.petrolPrice;
-          const nextCity = citiesClone.find(city => city.name === neighbor);
+          const nextCity = this.cities.find(city => city.name === neighbor);
           findAllResults(nextCity, currDistance, currSum);
         }
       }
@@ -63,5 +60,47 @@ class Navigator {
     throw new Error("Возможных путей нет.");
   }
 }
+
+const cities = [
+  {
+    name: "Yekaterinburg",
+    petrolPrice: 50.0,
+    paths: {
+      Chelyabinsk: 200,
+      Tumen: 350,
+    },
+  },
+  {
+    name: "Perm",
+    petrolPrice: 46.0,
+    paths: {
+      Yekaterinburg: 300,
+      Chelyabinsk: 500,
+      Tumen: 650,
+    },
+  },
+  {
+    name: "Chelyabinsk",
+    petrolPrice: 42.45,
+    paths: {
+      Yekaterinburg: 400,
+      Perm: 700,
+      Tumen: 748,
+    },
+  },
+  {
+    name: "Tumen",
+    petrolPrice: 60.45,
+    paths: {
+      Yekaterinburg: 9,
+      Perm: 780,
+      Chelyabinsk: 130,
+    },
+  },
+];
+
+
+const nav = new Navigator(cities);
+console.log(nav.buildPath("Perm", "Perm", 0.06));
 
 module.exports = { Navigator };
