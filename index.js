@@ -5,6 +5,7 @@ class Navigator {
    * @param {*} cities 
    */
   constructor(cities) {
+    this.cities = cities;
   }
 
   /**
@@ -14,6 +15,45 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
+    if (!(typeof pointA === "string" &&
+      typeof pointB === "string" &&
+      typeof consumtion === "number")){
+      throw new Error("Переданы некорректные данные.");
+    }
+    const start = this.cities.find(city => city.name === pointA);
+    const finish = this.cities.find(city => city.name === pointB);
+    const citiesClone = this.cities.slice(0);
+    let allResults = [];
+    const findAllResults = (currCity, distance, sum) => {
+      if (currCity.name === finish.name) {
+        allResults.push({distance, sum});
+        findAllResults(start, 0, 0);
+        return;
+      }
+      if (currCity.visited) {
+        return;
+      }
+      if (currCity.name !== start.name){
+       currCity.visited = true; 
+      }
+      
+      for (let neighbor in currCity.paths) {
+        if (currCity.name === start.name) {
+          distance = 0;
+        }
+        if (neighbor !== start.name){        
+          const currDistance = distance + currCity.paths[neighbor];
+          const currSum = sum + currCity.paths[neighbor] * consumtion * currCity.petrolPrice;
+          const nextCity = citiesClone.find(city => city.name === neighbor);
+          findAllResults(nextCity, currDistance, currSum);
+        }
+      }
+    };
+    findAllResults(start, 0, 0);
+    if (allResults.length !== 0) {
+      return allResults.sort((a, b) => a.distance - b.distance)[0];
+    }
+    throw new Error("Возможных путей нет.");
   }
 }
 
