@@ -72,11 +72,7 @@ class Navigator {
             node = this.findNodeLowestCost(costs, processed);
         }
 
-        if (costs[pointB]) {
-            return costs[pointB];
-        } else {
-            throw new Error('нет пути из города А в город Б');
-        }
+        return costs[pointB];
     }
 
     findNodeLowestCost(costs, processed) {
@@ -93,5 +89,50 @@ class Navigator {
         return lowestNode;
     }
 }
+
+const cities = [
+    {
+        name: "Yekaterinburg",
+        petrolPrice: 50.0,
+        paths: {
+            Chelyabinsk: 200,
+        },
+    },
+    {
+        name: "Perm",
+        petrolPrice: 46.0,
+        paths: {
+            Yekaterinburg: 300,
+            Chelyabinsk: 500,
+        },
+    },
+    {
+        name: "Chelyabinsk",
+        petrolPrice: 42.45,
+        paths: {
+            Yekaterinburg: 400,
+            Perm: 700,
+        },
+    },
+    {
+        name: "Tumen",
+        petrolPrice: 60.45,
+        paths: {
+            Yekaterinburg: 9,
+            Perm: 780,
+            Chelyabinsk: 130,
+        },
+    },
+];
+
+const nav = new Navigator(cities);
+console.log(nav.buildPath("Yekaterinburg", "Tumen", 0.06));
+
+/*
+{
+  distance: 900,
+  sum: 2382.9,
+},
+*/
 
 module.exports = { Navigator };
