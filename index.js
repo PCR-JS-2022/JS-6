@@ -25,6 +25,8 @@ class Navigator {
         throw new Error('Некорректные данные');
       }
 
+    if(pointA === pointB) return { distance: 0, sum: 0};
+
     let result = null;
 
     const findBestPath = (currentCity, visitedCities = [], distance = 0, currSum = 0) => {
