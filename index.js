@@ -73,7 +73,7 @@ class Navigator {
         }
 
         if (costs[pointB]) {
-            if (costs[pointB].distance === Number.POSITIVE_INFINITY) {
+            if (costs[pointB].distance === Number.POSITIVE_INFINITY || costs[pointB].sum <= 0) {
                 throw new Error('нет пути из города А в город Б');
             } else {
                 return costs[pointB];
