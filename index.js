@@ -110,7 +110,7 @@ class Navigator {
         processed.push(node);
         node = findNodeLowersCost(costs, processed);
       }
-      if (costs[end] === Infinity) {
+      if (!isFinite(costs[end])) {
         throw new Error('отсутствует путь из точки А в точку В');
       }
 
