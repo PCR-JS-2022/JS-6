@@ -41,7 +41,7 @@ class Navigator {
 
             for (const currCity in currentCity.paths) {
                 const currentDistance = distance + currentCity.paths[currCity];
-                const currentSum = currentCity.petrolPrice * consumtion * currentCity.paths[currCity] + sum;
+                const currentSum = sum + currentCity.paths[currCity] * currentCity.petrolPrice * consumtion;
                 findAllWays(currCity, currentDistance, currentSum);
             }
         }
