@@ -15,6 +15,11 @@ class Navigator {
      * @param {number} consumtion
      */
     buildPath(pointA, pointB, consumtion) {
+        if (!(typeof pointA === "string" &&
+                typeof pointB === "string" &&
+                typeof consumtion === "number")) {
+            throw new Error("Переданы невалидные данные");
+        }
 
         const a = this.cities.map(city => ({...city, Visited: false }));
         const startCity = this.cities.find(city => city.name === pointA);
@@ -43,7 +48,7 @@ class Navigator {
 
         findAllWays(startCity.name, 0, 0)
 
-        return result[0];
+        return result.sort((a, b) => a.distance - b.distance)[0];
     }
 }
 
