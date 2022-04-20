@@ -54,7 +54,7 @@ class Navigator {
     isNum(consumtion);
     isPoint(this.cities, pointA);
     isPoint(this.cities, pointB);
-    if (pointA === pointB) {
+    if (pointA === pointB || this.cities.length <= 1) {
       return {
         distance: 0,
         sum: 0
@@ -74,7 +74,7 @@ class Navigator {
     for (let i = 0; i < shortWay.length - 1; i++) {
       this.cities.forEach(city => {
         if (city.name === shortWay[i]) {
-          price += city.paths[shortWay[i + 1]] * city.petrolPrice * consumtion;
+          price += consumtion * city.paths[shortWay[i + 1]] * city.petrolPrice;
         }
       })
     }
