@@ -29,6 +29,10 @@ class Navigator {
             throw new Error('Invalid arguments');
         }
 
+        if (pointB === pointA) {
+            return { distance: 0, sum: 0 };
+        }
+
         //кратчайшие пути
         const costs = {};
         //узлы которые проверили
@@ -99,5 +103,53 @@ class Navigator {
         return lowestNode;
     }
 }
+
+const cities = [
+    {
+        name: "Yekaterinburg",
+        petrolPrice: 50.0,
+        paths: {
+            Chelyabinsk: 200,
+            Tumen: 350,
+        },
+    },
+    {
+        name: "Perm",
+        petrolPrice: 46.0,
+        paths: {
+            Yekaterinburg: 300,
+            Chelyabinsk: 500,
+            Tumen: 650,
+        },
+    },
+    {
+        name: "Chelyabinsk",
+        petrolPrice: 42.45,
+        paths: {
+            Yekaterinburg: 400,
+            Perm: 700,
+            Tumen: 748,
+        },
+    },
+    {
+        name: "Tumen",
+        petrolPrice: 60.45,
+        paths: {
+            Yekaterinburg: 9,
+            Perm: 780,
+            Chelyabinsk: 130,
+        },
+    },
+];
+
+const nav = new Navigator(cities);
+console.log(nav.buildPath("Chelyabinsk", "Chelyabinsk", 0.06));
+
+/*
+{
+  distance: 900,
+  sum: 2382.9,
+},
+*/
 
 module.exports = { Navigator };
