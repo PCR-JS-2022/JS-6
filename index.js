@@ -15,63 +15,69 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
-    const indexCities = [];
+    const graph = {};
     this.cities.forEach(city => {
-      indexCities.push(city.name);
-    });
-    
-    const table = [];
-    this.cities.forEach(city => {
-      let d = [];
+      let availableCities = {};
       for(let c in city.paths) {
-        d[indexCities.indexOf(c)] = city.paths[c];
+        availableCities[c] = city.paths[c];
       }
-      table[indexCities.indexOf(city.name)] = d;
+      graph[city.name] = availableCities;
     })
-    
-    const indexStart = indexCities.indexOf(pointA); 
-    const indexEnd = indexCities.indexOf(pointB); 
-    const cityA = this.cities.find(i => i.name === pointA);
-    
-    function Dijkstra(matrix, start = 0) {
-      const rows = matrix.length; 
-      const cols = matrix[0].length;
-      const distance = new Array(rows).fill(Infinity);
-      const cities = [];
-      const km = [];
-      distance[start] = 0;
-      for(let i = 0; i < rows; i++) {
-        if(distance[i] < Infinity) {
-          for(let j = 0; j < cols; j++) {
-            if(matrix[i][j] + distance[i] < distance[j]) {
-              if(j === indexEnd) {
-                cities.push(i);
-                km.push(distance[i], matrix[i][j])
-              }
-              distance[j] = matrix[i][j] + distance[i];
-            }
-        }
-      }
-     }
-      return [cities, distance, km];
-    }
-    const distance = Dijkstra(table, indexStart)[1][indexEnd];
-    const city = Dijkstra(table, indexStart)[0];
-    const km = Dijkstra(table, indexStart)[2].filter(i => i !== 0);
 
-    let sum = cityA.petrolPrice * km[0] * consumtion; 
-    for(let i = 0; i < city.length; i++) {
-      if(city[i] === indexStart) {
-        continue;
+    function findWay(graph, point) {
+      let result = {};
+      result[point] = [];
+      result[point].dist = 0;
+      
+      while(true) {
+        let parent = null;
+        let nearest = null;
+        let dist = Infinity;
+        
+        for(let n in result) {
+          if(!result[n])
+            continue
+          let nDist = result[n].dist;
+          let adj = graph[n];
+          for(var a in adj) {
+            if(result[a])
+              continue;
+            let d = adj[a] + nDist;
+            if(d < dist) {
+              parent = result[n];
+              nearest = a;
+              dist = d;
+            }
+          }
+        }
+
+        if(dist === Infinity) {
+            break;
+        }
+        
+        result[nearest] = parent.concat(nearest);
+        result[nearest].dist = dist;
       }
-      sum += this.cities[city[i]].petrolPrice * km[i + 1] * consumtion;
+      
+      return result;
     }
-    
-    return {
-      distance,
-      sum
+    let way = findWay(graph, pointA)[pointB];
+    const distance = way.dist;
+    const citiesOnTheWay = [];
+    for(let i in way) {
+      if(i !== "dist")
+      citiesOnTheWay.push(way[i]);
     }
-  }
+    let objPointA = this.cities.filter(i => i.name === pointA)[0];
+    let sum = objPointA.petrolPrice * objPointA.paths[citiesOnTheWay[0]] * consumtion;
+    citiesOnTheWay.forEach((city, index) => {
+      if(index < citiesOnTheWay.length - 1) {
+        let objCity = this.cities.filter(i => i.name === city)[0];
+        sum += consumtion * objCity.petrolPrice * objCity.paths[citiesOnTheWay[index + 1]];
+      }
+    })
+    return { distance, sum } ;
+   }
 }
 
 module.exports = { Navigator };
