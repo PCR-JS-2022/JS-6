@@ -24,6 +24,13 @@ function isNum(num) {
   }
 }
 
+function isPoint(cities, point) {
+  if (!cities.some(city => city.name === point)) {
+    throw new Error('Некорректные данные');
+  }
+}
+
+
 /** Класс навигатора */
 class Navigator {
   /**
@@ -45,6 +52,14 @@ class Navigator {
     isStr(pointA);
     isStr(pointB);
     isNum(consumtion);
+    isPoint(this.cities, pointA);
+    isPoint(this.cities, pointB);
+    if (pointA === pointB) {
+      return {
+        distance: 0,
+        sum: 0
+      };
+    }
     let graph = {};
     this.cities.forEach(el => {
       graph[el.name] = el.paths;
