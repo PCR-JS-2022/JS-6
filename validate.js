@@ -1,9 +1,10 @@
 const validateCities = (cities) => {
+    
     if (!Array.isArray(cities)) {
         throw new Error('Некорректный массив городов')
     }
     cities.map((city) => {
-        if (!('name' in city && 'petrolPrice' in city && paths in city)) {
+        if (!('name' in city && 'petrolPrice' in city && 'paths' in city)) {
             throw new Error('Некорректный массив городов')
         }
     })
@@ -19,7 +20,7 @@ const validateName = (name) => {
 
 const validateCity = (name, cities) => {
     validateName(name)
-    if (cities.find((city) => city.name == name)) {
+    if (cities.find((city) => city.name == name) == undefined) {
         throw new Error('Город не найден')
     }
 }
@@ -32,8 +33,16 @@ const validateConsumition = (consumition) => {
 }
 
 
+const validateWay = (way) => {
+    if (way.length == 0) {
+        throw new Error("Путь не найден")
+    }
+}
+
+
 module.exports = {
     validateCities,
     validateCity,
-    validateConsumition
+    validateConsumition,
+    validateWay
 }

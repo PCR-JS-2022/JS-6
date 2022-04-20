@@ -1,7 +1,8 @@
 const { 
   validateCities, 
   validateCity, 
-  validateConsumition 
+  validateConsumition,
+  validateWay
 } = require("./validate");
 
 
@@ -23,18 +24,33 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
-    validateCity(pointA)
-    validateCity(pointB)
+    validateCity(pointA, this.cities)
+    validateCity(pointB, this.cities)
     validateConsumition(consumtion)
 
-    if (pointA == pointB) {
-      return 0, 0
+    let start= this.cities.find(city => city.name == pointA)
+    let visited = []
+    let way = []
+
+    const findWay = (currentCity, distance, sum) => {
+      if (visited.indexOf(currentCity.name) == -1) {
+        if (currentCity.name == pointB) {
+          way.push({distance, sum})
+          return
+        }
+        visited.push(currentCity.name)
+        for (let path in currentCity.paths) {
+          let nextCity = this.cities.find(city => city.name == path)
+          let nextDistance = currentCity.paths[path]
+          let priceFuel = nextDistance * consumtion * currentCity.petrolPrice
+          findWay(nextCity, distance + nextDistance, sum + priceFuel)
+        }
+      }
     }
-
-    let cities = this.cities.map((city) => ({...city, visited: false}))
-
-    let isFind = false
-    let start = cities.find((city) => city.name == pointA)
+    
+    findWay(start, 0, 0);
+    validateWay(way)
+    return way.sort((first, second) => first.distance - second.distance)[0]
   }
 }
 
