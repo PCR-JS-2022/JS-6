@@ -15,6 +15,7 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
+    if(pointA === pointB) return {distance: 0, sum: 0};
     const graph = {};
     this.cities.forEach(city => {
       let availableCities = {};
