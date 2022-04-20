@@ -19,7 +19,7 @@ function isStr(str) {
 }
 
 function isNum(num) {
-  if (typeof num !== "number") {
+  if (typeof num !== "number" || num < 0) {
     throw new Error("Некорректные данные");
   }
 }
@@ -74,7 +74,7 @@ class Navigator {
     for (let i = 0; i < shortWay.length - 1; i++) {
       this.cities.forEach(city => {
         if (city.name === shortWay[i]) {
-          price += consumtion * city.paths[shortWay[i + 1]] * city.petrolPrice;
+          price += city.paths[shortWay[i + 1]] * city.petrolPrice * consumtion;
         }
       })
     }
