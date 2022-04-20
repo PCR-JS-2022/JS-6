@@ -1,3 +1,10 @@
+const { 
+  validateCities, 
+  validateCity, 
+  validateConsumition 
+} = require("./validate");
+
+
 /** Класс навигатора */
 class Navigator {
   /**
@@ -5,6 +12,8 @@ class Navigator {
    * @param {*} cities 
    */
   constructor(cities) {
+    validateCities(cities)
+		this.cities = cities
   }
 
   /**
@@ -14,7 +23,20 @@ class Navigator {
    * @param {number} consumtion
    */
   buildPath(pointA, pointB, consumtion) {
+    validateCity(pointA)
+    validateCity(pointB)
+    validateConsumition(consumtion)
+
+    if (pointA == pointB) {
+      return 0, 0
+    }
+
+    let cities = this.cities.map((city) => ({...city, visited: false}))
+
+    let isFind = false
+    let start = cities.find((city) => city.name == pointA)
   }
 }
+
 
 module.exports = { Navigator };
